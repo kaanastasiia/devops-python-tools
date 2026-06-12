@@ -1,0 +1,2 @@
+This script allows to walk a directory tree and produces a report showing the top 10 largest files, their sizes in human-readable format (KB/MB/GB), and their paths. 
+Bonus: filter by extension (e.g. only `.log` or `.gz`).
