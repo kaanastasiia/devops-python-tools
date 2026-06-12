@@ -13,7 +13,7 @@ def report_disk_usage(dir_name):
                     i = math.floor(math.log(size, 1024))
                     p = math.pow(1024, i)
                     human_readable_size = size / p
-                    print(f"{file_path} sorted{human_readable_size:.2f} {units[i]}")
+                    print(f"{file_path} {human_readable_size:.2f} {units[i]}")
                 else:
                     print(f"{file_path} {size} Bytes")
 
