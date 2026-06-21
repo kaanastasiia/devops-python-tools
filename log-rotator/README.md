@@ -1,0 +1,1 @@
+Given a directory of logs, find all files older than N days (accept N as argument) and move them into an archive/YYYY-MM/ subdirectory, creating it if it doesn't exist. Files already in the archive should not be touched.
