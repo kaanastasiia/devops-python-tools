@@ -24,3 +24,4 @@ def search_through_config(config_line):
 if __name__=="__main__":
     config_file=sys.argv[1]
     config_auditor(config_file)
+
