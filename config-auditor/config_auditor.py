@@ -12,16 +12,18 @@ def config_auditor(conf_path_arg):
         with open(conf_path) as conf:
             for line_num, line in enumerate(conf, start=1):
                 for pattern in search_pattern:
-                    search_through_config(line_num, line, pattern)
+                    if search_through_config(conf_path, line_num, line, pattern):
+                        break
 
     elif conf_path.is_dir():
         for config in Path(conf_path).rglob("*.conf"):
             with open(config) as conf:
                 for line_num, line in enumerate(conf, start=1):
                     for pattern in search_pattern:
-                        search_through_config(line_num, line, pattern)
+                        if search_through_config(config, line_num, line, pattern):
+                            break
 
-def search_through_config(line_num, config_line, pattern):
+def search_through_config(conf, line_num, config_line, pattern):
     match = re.search(pattern, config_line)
     if not match:
         return
@@ -31,21 +33,23 @@ def search_through_config(line_num, config_line, pattern):
         ip = groups.get("ip")
         port = groups.get("port")
         ip_str = f"{ip}:" if ip else ""
-        combined = f"{line_num} {directive} {ip_str}{port}"
+        combined = f"{conf} {line_num} {directive} {ip_str}{port}"
         print(combined)
+        return True
 
     elif directive == "server_name":
         domains = groups.get("domains", "").strip()
-        combined = f"{line_num} {directive} {domains}"
+        combined = f"{conf} {line_num} {directive} {domains}"
         print(combined)
+        return True
 
     else:
         ip = groups.get("ip")
-        ip_str = f"{ip}:" if ip else ""
         port = groups.get("port")
-        combined = f"{line_num} {directive} {ip_str}{port}"
+        ip_str = f"{ip}:{port}" if ip and port else (f"{ip}" if ip else "")
+        combined = f"{conf} {line_num} {directive} {ip_str}"
         print(combined)
-
+        return True
 
 if __name__=="__main__":
     config_file=sys.argv[1]
