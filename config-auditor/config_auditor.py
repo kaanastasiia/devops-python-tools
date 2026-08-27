@@ -4,9 +4,9 @@ from pathlib import Path
 def config_auditor(conf_path_arg):
     conf_path = Path(conf_path_arg)
     listen_port_pattern = re.compile(r"(?P<directive>listen)\s+(?:(?P<ip>[\w\.\:\[\]]+):)?(?P<port>\d+)")
-    server_directive_pattern = re.compile(r"^\s*(?P<directive>server)\s+(?P<ip>[\w\.\-\[\]]+)(?::(?P<port>\d+))?")
+    ip_line_pattern = re.compile(r"^\s*(?P<directive>\S+)\s+.*?(?P<ip>\d{1,3}(?:\.\d{1,3}){3})(?::(?P<port>\d+))?")
     server_name_pattern = re.compile(r"(?P<directive>server_name)\s+(?P<domains>[^;]+);")
-    search_pattern = [listen_port_pattern, server_name_pattern, server_directive_pattern]
+    search_pattern = [listen_port_pattern, server_name_pattern, ip_line_pattern]
     
     if conf_path.is_file() and conf_path.suffix == ".conf":
         with open(conf_path) as conf:
@@ -39,7 +39,7 @@ def search_through_config(line_num, config_line, pattern):
         combined = f"{line_num} {directive} {domains}"
         print(combined)
 
-    elif directive == "server":
+    else:
         ip = groups.get("ip")
         ip_str = f"{ip}:" if ip else ""
         port = groups.get("port")
