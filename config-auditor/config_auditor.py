@@ -50,5 +50,8 @@ def search_through_config(conf, line_num, config_line, pattern):
         return True
 
 if __name__=="__main__":
+    if len(sys.argv) < 2:
+        print("Usage: python3 config_auditor.py <path_to_conf_or_dir>", file=sys.stderr)
+        sys.exit(1)
     config_file=sys.argv[1]
     config_auditor(config_file)
